@@ -1,5 +1,12 @@
-build:
-	cp config.yaml app/; cd app; go build -o tinyurl
+prepare:
+	cp config.yaml app/
 
-run: build
+build:
+	cd app; go build -o tinyurl
+
+run: prepare build
 	cd app; ./tinyurl
+
+clean:
+	cp app; go clean
+	cp app; rm config.yaml; rm tinyurl
