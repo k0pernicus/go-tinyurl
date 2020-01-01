@@ -5,7 +5,9 @@ This tutorial permits to learn go in an easy way, in creating a simple project: 
 
 This project has the following goals:
 
-1. Create a REST API to create and request tiny URLs, stored in an internal map, that respects [standard Go project layout](https://github.com/golang-standards/project-layout) [Available](https://github.com/k0pernicus/go-tinyurl/tree/go-service)
-2. Store each tiny URL in a dedicated database (like PostgreSQL).
-3. Use Docker to run localy the service.
-4. Use Heroku to host the service "in the clouuuud" (eg. a remote server).
+| # Step | Title | Availability |
+|---|---|---|
+| 1 | Create a REST API, in go | [Available](https://github.com/k0pernicus/go-tinyurl/tree/go-service) |
+| 2 | Use external database | **In progress** |
+| 3 | Dockerize the service | **In progress** |
+| 4 | Host to heroku | **In progress** |
