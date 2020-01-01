@@ -36,7 +36,13 @@ If you use your browser, this will redirect you to the right website.
 If you want to append a deadline to the tiny URL:
 
 ```bash
-curl -X POST localhost:8000/create -H "Content-Type: application/json" -d '{"url":"https://lemonde.fr", "dead_in":"30s"}'
+curl -X POST HOST:PORT/create -H "Content-Type: application/json" -d '{"url":"https://lemonde.fr", "dead_in":"30s"}'
 ```
 
 30 seconds after the creation, the link will not exists anymore.
+
+To check if an ID exists, you can use the route `exists`:
+
+```bash
+curl -X GET HOST:PORT/exists/SRsidXIl
+```
