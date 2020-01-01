@@ -17,6 +17,8 @@ To run the project, you can modify the `config.yaml` file available at the root 
 
 # Usage
 
+## Creation
+
 You can create a tiny URL using:
 
 ```bash
@@ -30,22 +32,27 @@ For URL creation, you will have this kind of structure:
 {"status_code":200,"response":{"id":"SRsidXIl","message":"OK"}}
 ```
 
-The field `id` corresponds to the ID to append to the URL domain, like this: `http://HOST:PORT/SRsidXIl`.
-If you use your browser, this will redirect you to the right website.
+The field `id` corresponds of the ID to append to the URL domain.
 
-If you want to append a deadline to the tiny URL:
+If you want to append a deadline to the tiny URL (default: **no limit**), like 30 seconds:
 
 ```bash
 curl -X POST HOST:PORT/create -H "Content-Type: application/json" -d '{"url":"https://lemonde.fr", "dead_in":"30s"}'
 ```
 
-30 seconds after the creation, the link will not exists anymore.
-
-Also, you can generate a qr-code that points to the tiny URL, using:
+Also, you can generate a qr-code that points to the tiny URL (default: **false**), using:
 
 ```bash
-curl -X POST HOST:PORT/create -H "Content-Type: application/json" -d '{"url":"https://lemonde.fr", "gen_qrcode": true}'
+curl -X POST HOST:PORT/create -H "Content-Type: application/json" -d '{"url":"https://lemonde.fr", "gen_qrcode":true}'
 ```
+
+## Get
+
+To reach the final URL, you can use the `get` route: `http://HOST:PORT/<ID>`.
+Please to replace the `<ID>` with the one returned by the service previously (or scan you qr code).
+If you use your browser, this will redirect you to the right website.
+
+## Check if tiny URL still exists
 
 To check if an ID exists, you can use the route `exists`:
 
