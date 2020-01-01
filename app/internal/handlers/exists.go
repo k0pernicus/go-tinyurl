@@ -28,13 +28,15 @@ func Exists(w http.ResponseWriter, r *http.Request) {
 
 	_, exists := app.DB.Load(id)
 	statusCode := http.StatusOK
+	message := types.OK
 	if !exists {
 		statusCode = http.StatusNotFound
+		message = types.URLDoesNotExists
 	}
 	helpers.AnswerWith(w, types.Response{
 		StatusCode: statusCode,
 		Response: types.ExistsResponse{
-			Message: types.OK,
+			Message: message,
 			Exists:  exists,
 		},
 	})
