@@ -12,3 +12,8 @@ func AnswerWith(w http.ResponseWriter, response types.Response) {
 	b, _ := json.Marshal(response)
 	w.Write(b)
 }
+
+func AnswerRaw(w http.ResponseWriter, response types.Response) {
+	w.WriteHeader(response.StatusCode)
+	w.Write([]byte(response.Response.(string)))
+}

@@ -39,21 +39,29 @@ func Create(w http.ResponseWriter, r *http.Request) {
 		Deadline:    time.Now().Add(c.DeadIn.Duration),
 	})
 
-	response := types.CreationResponse{
-		Message: types.OK,
-		ID:      id,
-	}
-
 	if c.GenerateQRCode {
-		if q, err := qrcode.New(c.URL, qrcode.Medium); err != nil {
+		if q, err := qrcode.New(helpers.BuildURL(id), qrcode.Medium); err != nil {
 			fmt.Printf("Failed to generate qr code: %s\n", err.Error())
+			helpers.AnswerWith(w, types.Response{
+				StatusCode: http.StatusInternalServerError,
+				Response: types.CreationResponse{
+					Message: types.CannotCreateQRCode,
+				},
+			})
 		} else {
-			response.QRCode = q.ToSmallString(false)
+			helpers.AnswerRaw(w, types.Response{
+				StatusCode: http.StatusOK,
+				Response:   q.ToSmallString(false),
+			})
 		}
+		return
 	}
 
 	helpers.AnswerWith(w, types.Response{
 		StatusCode: http.StatusOK,
-		Response:   response,
+		Response: types.CreationResponse{
+			Message: types.OK,
+			ID:      id,
+		},
 	})
 }

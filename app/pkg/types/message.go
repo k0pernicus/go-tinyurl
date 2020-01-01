@@ -12,4 +12,6 @@ const (
 	CannotDecodeMessage Message = "Cannot decode message"
 	// URLDoesNotExists is sent back if the requested tiny URL id does not exists
 	URLDoesNotExists Message = "URL does not exists"
+	// CannotCreateQRCode is sent back if the user requested a qr code but generation failed
+	CannotCreateQRCode Message = "Cannot create QR code"
 )

@@ -1,9 +1,21 @@
 package tiny
 
 import (
+	"fmt"
 	"sync"
 	"time"
 )
+
+type Configuration struct {
+	Host string `yaml:"host"`
+	Port string `yaml:"port"`
+}
+
+func (c Configuration) String() string {
+	return fmt.Sprintf("%s:%s", c.Host, c.Port)
+}
+
+var C Configuration
 
 // DB is a temporary internal database that contains all created tiny URL and redirections
 var DB sync.Map

@@ -7,18 +7,10 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	app "github.com/k0pernicus/go-tinyurl/internal"
 	"github.com/k0pernicus/go-tinyurl/internal/handlers"
 	"gopkg.in/yaml.v2"
 )
-
-type Configuration struct {
-	Host string `yaml:"host"`
-	Port string `yaml:"port"`
-}
-
-func (c Configuration) String() string {
-	return fmt.Sprintf("%s:%s", c.Host, c.Port)
-}
 
 func main() {
 	// Read configuration file
@@ -26,8 +18,7 @@ func main() {
 	if err != nil {
 		panic(fmt.Sprintf("Cannot read configuration file at root: %s", err.Error()))
 	}
-	var c Configuration
-	err = yaml.Unmarshal(yamlFile, &c)
+	err = yaml.Unmarshal(yamlFile, &app.C)
 	if err != nil {
 		panic(fmt.Sprintf("Unmarshal configuration error: %s", err.Error()))
 	}
@@ -39,7 +30,7 @@ func main() {
 	router.HandleFunc("/create", handlers.Create).Methods("POST")
 	router.HandleFunc("/exists/{id}", handlers.Exists).Methods("GET")
 
-	addr := c.String()
+	addr := app.C.String()
 
 	// Create server
 	srv := &http.Server{

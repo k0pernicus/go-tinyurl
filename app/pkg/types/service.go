@@ -18,7 +18,6 @@ type CreationRequest struct {
 type CreationResponse struct {
 	ID      string  `json:"id,omitempty"`
 	Message Message `json:"message"`
-	QRCode  string  `json:"qrcode,omitempty`
 }
 
 // ExistsResponse is a specific structure that handles the response for the exists handler
