@@ -9,14 +9,16 @@ type Response struct {
 // CreationRequest is a simple structure that contains all the informations
 // to create a tiny URL
 type CreationRequest struct {
-	URL    string   `json:"url"`
-	DeadIn Duration `json:"dead_in"`
+	URL            string   `json:"url"`
+	DeadIn         Duration `json:"dead_in"`
+	GenerateQRCode bool     `json:"gen_qrcode"`
 }
 
 // CreationResponse is the structure, returned by the service, when creating a tiny URL
 type CreationResponse struct {
 	ID      string  `json:"id,omitempty"`
 	Message Message `json:"message"`
+	QRCode  string  `json:"qrcode,omitempty`
 }
 
 // ExistsResponse is a specific structure that handles the response for the exists handler
