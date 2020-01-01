@@ -30,11 +30,11 @@ func Create(w http.ResponseWriter, r *http.Request) {
 
 	id := helpers.Generate()
 
-	hasDeadline := c.Time != 0
+	hasDeadline := c.DeadIn.Duration != 0
 	app.DB.Store(id, app.Informations{
 		Redirection: c.URL,
 		HasDeadline: hasDeadline,
-		Deadline:    time.Now().Add(c.Time),
+		Deadline:    time.Now().Add(c.DeadIn.Duration),
 	})
 
 	helpers.AnswerWith(w, types.Response{

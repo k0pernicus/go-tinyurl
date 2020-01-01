@@ -1,8 +1,6 @@
 package types
 
-import "time"
-
-// Response structures and permits to encode the service response for any query
+//Response structures and permits to encode the service response for any query
 type Response struct {
 	StatusCode int         `json:"status_code"`
 	Response   interface{} `json:"response"`
@@ -11,8 +9,8 @@ type Response struct {
 // CreationRequest is a simple structure that contains all the informations
 // to create a tiny URL
 type CreationRequest struct {
-	URL  string        `json:"url"`
-	Time time.Duration `json:"duration"`
+	URL    string   `json:"url"`
+	DeadIn Duration `json:"dead_in"`
 }
 
 // CreationResponse is the structure, returned by the service, when creating a tiny URL

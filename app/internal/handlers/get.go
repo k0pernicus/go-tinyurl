@@ -45,7 +45,7 @@ func Get(w http.ResponseWriter, r *http.Request) {
 		helpers.AnswerWith(w, types.Response{
 			StatusCode: http.StatusNotFound,
 			Response: types.ExistsResponse{
-				Message: types.OK,
+				Message: types.URLDoesNotExists,
 			},
 		})
 		return
