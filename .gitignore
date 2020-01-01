@@ -14,5 +14,8 @@
 # Service name
 tinyurl
 
+# Internal configuration file
+app/config.yaml
+
 # Dependency directories (remove the comment below to include it)
 # vendor/
