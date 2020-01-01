@@ -41,6 +41,12 @@ curl -X POST HOST:PORT/create -H "Content-Type: application/json" -d '{"url":"ht
 
 30 seconds after the creation, the link will not exists anymore.
 
+Also, you can generate a qr-code that points to the tiny URL, using:
+
+```bash
+curl -X POST HOST:PORT/create -H "Content-Type: application/json" -d '{"url":"https://lemonde.fr", "gen_qrcode": true}'
+```
+
 To check if an ID exists, you can use the route `exists`:
 
 ```bash
