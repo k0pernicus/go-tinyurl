@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	app "github.com/k0pernicus/go-tinyurl/internal"
 	"github.com/k0pernicus/go-tinyurl/internal/helpers"
@@ -27,19 +26,7 @@ func Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	uuid, err := uuid.Parse(id)
-	if err != nil {
-		fmt.Println("Cannot parse 'id'")
-		helpers.AnswerWith(w, types.Response{
-			StatusCode: http.StatusBadRequest,
-			Response: types.ExistsResponse{
-				Message: types.CannotParseUUID,
-			},
-		})
-		return
-	}
-
-	object, exists := app.DB.Load(uuid)
+	object, exists := app.DB.Load(id)
 	if !exists {
 		fmt.Println("ID does not exists")
 		helpers.AnswerWith(w, types.Response{
@@ -54,7 +41,7 @@ func Get(w http.ResponseWriter, r *http.Request) {
 	informations := object.(app.Informations)
 
 	if informations.IsDead() {
-		app.DB.Delete(uuid)
+		app.DB.Delete(id)
 		helpers.AnswerWith(w, types.Response{
 			StatusCode: http.StatusNotFound,
 			Response: types.ExistsResponse{
@@ -64,5 +51,5 @@ func Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, informations.Redirection, http.StatusOK)
+	http.Redirect(w, r, informations.Redirection, http.StatusFound)
 }

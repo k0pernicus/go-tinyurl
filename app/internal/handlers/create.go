@@ -8,7 +8,6 @@ import (
 
 	"github.com/k0pernicus/go-tinyurl/internal/helpers"
 
-	"github.com/google/uuid"
 	app "github.com/k0pernicus/go-tinyurl/internal"
 	"github.com/k0pernicus/go-tinyurl/pkg/types"
 )
@@ -29,20 +28,10 @@ func Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newUUID, err := uuid.NewUUID()
-	if err != nil {
-		fmt.Printf("Cannot create new UUID: %s", err.Error())
-		helpers.AnswerWith(w, types.Response{
-			StatusCode: http.StatusInternalServerError,
-			Response: types.CreationResponse{
-				Message: types.CannotGenerateNewUUID,
-			},
-		})
-		return
-	}
+	id := helpers.Generate()
 
 	hasDeadline := c.Time != 0
-	app.DB.Store(newUUID, app.Informations{
+	app.DB.Store(id, app.Informations{
 		Redirection: c.URL,
 		HasDeadline: hasDeadline,
 		Deadline:    time.Now().Add(c.Time),
@@ -52,7 +41,7 @@ func Create(w http.ResponseWriter, r *http.Request) {
 		StatusCode: http.StatusOK,
 		Response: types.CreationResponse{
 			Message: types.OK,
-			ID:      newUUID.String(),
+			ID:      id,
 		},
 	})
 }
