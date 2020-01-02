@@ -19,6 +19,7 @@ tinyurl
 
 # Internal configuration file
 app/config.yaml
+db/
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
