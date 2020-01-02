@@ -2,18 +2,19 @@ prepare:
 	cp config.yaml app/
 	docker build -t go-tinyurl-db -f sqlite-Dockerfile .
 
-db:
-	docker run --rm -it -v `pwd`/db:/db go-tinyurl-db urls.db
+run-db:
+	docker run --rm -d -v `pwd`/db:/db go-tinyurl-db urls.db
 
-backup:
-	docker run --rm -it -v `pwd`/db:/db go-tinyurl-db urls.db .dump >> urls_dump.sql
+backup-db:
+	docker run --rm -it -v `pwd`/db:/db go-tinyurl-db urls.db .dump >> urls_dump_$(shell date -u +"%Y-%m-%dT%H:%M:%SZ").sql
 
 build:
 	cd app; go build -o tinyurl
 
-run: build
+run: run-db build
 	cd app; ./tinyurl
 
 clean:
 	cp app; go clean
 	cp app; rm config.yaml; rm tinyurl
+	rm -rf db/
