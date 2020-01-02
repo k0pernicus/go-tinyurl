@@ -23,6 +23,12 @@ func main() {
 		panic(fmt.Sprintf("Unmarshal configuration error: %s", err.Error()))
 	}
 
+	// Connect to sqlite DB
+	if err = app.ConnectDB("../db/urls.db"); err != nil {
+		panic(fmt.Sprintf("Failed to connect to DB: %s\n", err.Error()))
+	}
+	defer app.DB.Close()
+
 	// Register handlers
 	fmt.Println("Registering handlers... ")
 	router := mux.NewRouter()
@@ -40,6 +46,7 @@ func main() {
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
+	defer srv.Close()
 
 	fmt.Printf("Server is running on %s\n", addr)
 

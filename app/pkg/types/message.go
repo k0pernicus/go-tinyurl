@@ -14,4 +14,8 @@ const (
 	URLDoesNotExists Message = "URL does not exists"
 	// CannotCreateQRCode is sent back if the user requested a qr code but generation failed
 	CannotCreateQRCode Message = "Cannot create QR code"
+	// CannotInsertRecord is sent back if we can't insert a given record in SQLite DB
+	CannotInsertRecord Message = "Cannot insert record"
+	// CannotRetrieveRecord is sent back if we can't retrieve a given record from a SQLite DB
+	CannotRetrieveRecord Message = "Cannot retrieve record"
 )

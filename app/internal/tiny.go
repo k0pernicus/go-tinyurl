@@ -1,8 +1,8 @@
 package tiny
 
 import (
+	"database/sql"
 	"fmt"
-	"sync"
 	"time"
 )
 
@@ -10,8 +10,18 @@ var (
 	// C is the internal service configuration variable
 	C Configuration
 	// DB is a temporary internal database that contains all created tiny URL and redirections
-	DB sync.Map
+	DB *sql.DB
 )
+
+func ConnectDB(dbPath string) error {
+	var err error
+	DB, err = sql.Open("sqlite3", dbPath)
+	if err != nil {
+		return err
+	}
+	_, err = DB.Exec("create table if not exists urls (id text, redirection text, deadline time, has_deadline bool)")
+	return err
+}
 
 // Configuration handles all the informations for creation & launch
 type Configuration struct {

@@ -1,11 +1,14 @@
 package handlers
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 	app "github.com/k0pernicus/go-tinyurl/internal"
+	"github.com/k0pernicus/go-tinyurl/internal/db"
 	"github.com/k0pernicus/go-tinyurl/internal/helpers"
 	"github.com/k0pernicus/go-tinyurl/pkg/types"
 )
@@ -26,22 +29,29 @@ func Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	object, exists := app.DB.Load(id)
-	if !exists {
-		fmt.Println("ID does not exists")
-		helpers.AnswerWith(w, types.Response{
-			StatusCode: http.StatusNotFound,
-			Response: types.ExistsResponse{
-				Message: types.OK,
-			},
-		})
+	informations, exists := db.GetRecord(app.DB, id)
+	if exists != nil {
+		fmt.Printf("Failed to retrieve ID %s in DB\n", id)
+		if exists == errors.New("Not found") {
+			helpers.AnswerWith(w, types.Response{
+				StatusCode: http.StatusNotFound,
+				Response: types.ExistsResponse{
+					Message: types.OK,
+				},
+			})
+		} else {
+			helpers.AnswerWith(w, types.Response{
+				StatusCode: http.StatusInternalServerError,
+				Response: types.ExistsResponse{
+					Message: types.CannotRetrieveRecord,
+				},
+			})
+		}
 		return
 	}
 
-	informations := object.(app.Informations)
-
-	if informations.IsDead() {
-		app.DB.Delete(id)
+	if informations.HasDeadline && time.Now().After(informations.Deadline) {
+		db.DeleteRecord(app.DB, id)
 		helpers.AnswerWith(w, types.Response{
 			StatusCode: http.StatusNotFound,
 			Response: types.ExistsResponse{

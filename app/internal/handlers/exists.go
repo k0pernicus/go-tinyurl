@@ -6,6 +6,7 @@ import (
 
 	"github.com/gorilla/mux"
 	app "github.com/k0pernicus/go-tinyurl/internal"
+	"github.com/k0pernicus/go-tinyurl/internal/db"
 	"github.com/k0pernicus/go-tinyurl/internal/helpers"
 	"github.com/k0pernicus/go-tinyurl/pkg/types"
 )
@@ -26,10 +27,10 @@ func Exists(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, exists := app.DB.Load(id)
+	_, exists := db.GetRecord(app.DB, id)
 	statusCode := http.StatusOK
 	message := types.OK
-	if !exists {
+	if exists != nil {
 		statusCode = http.StatusNotFound
 		message = types.URLDoesNotExists
 	}
@@ -37,7 +38,7 @@ func Exists(w http.ResponseWriter, r *http.Request) {
 		StatusCode: statusCode,
 		Response: types.ExistsResponse{
 			Message: message,
-			Exists:  exists,
+			Exists:  exists == nil,
 		},
 	})
 }

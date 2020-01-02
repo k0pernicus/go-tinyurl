@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/k0pernicus/go-tinyurl/internal/db"
+
 	"github.com/k0pernicus/go-tinyurl/internal/helpers"
 
 	app "github.com/k0pernicus/go-tinyurl/internal"
@@ -33,11 +35,16 @@ func Create(w http.ResponseWriter, r *http.Request) {
 	id := helpers.Generate()
 
 	hasDeadline := c.DeadIn.Duration != 0
-	app.DB.Store(id, app.Informations{
-		Redirection: c.URL,
-		HasDeadline: hasDeadline,
-		Deadline:    time.Now().Add(c.DeadIn.Duration),
-	})
+	if err := db.AddRecord(app.DB, id, c.URL, time.Now().Add(c.DeadIn.Duration), hasDeadline); err != nil {
+		fmt.Printf("Error when adding record in DB: %s\n", err.Error())
+		helpers.AnswerWith(w, types.Response{
+			StatusCode: http.StatusInternalServerError,
+			Response: types.CreationResponse{
+				Message: types.CannotInsertRecord,
+			},
+		})
+		return
+	}
 
 	if c.GenerateQRCode {
 		if q, err := qrcode.New(helpers.BuildURL(id), qrcode.Medium); err != nil {
