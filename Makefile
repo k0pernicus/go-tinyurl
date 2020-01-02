@@ -3,7 +3,7 @@ prepare:
 	docker build -t go-tinyurl-db -f sqlite-Dockerfile .
 
 run-db:
-	docker run --rm -d -v `pwd`/db:/db go-tinyurl-db urls.db
+	docker run --rm -v `pwd`/db:/db go-tinyurl-db urls.db
 
 backup-db:
 	docker run --rm -it -v `pwd`/db:/db go-tinyurl-db urls.db .dump >> urls_dump_$(shell date -u +"%Y-%m-%dT%H:%M:%SZ").sql
